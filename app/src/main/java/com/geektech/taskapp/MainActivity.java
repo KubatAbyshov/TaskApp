@@ -1,18 +1,15 @@
 package com.geektech.taskapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.geektech.taskapp.ui.home.HomeFragment;
+import com.geektech.taskapp.onboard.OnBoardActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -24,11 +21,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
-import android.widget.Button;
-import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +31,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences preferences = getSharedPreferences("settings", MODE_PRIVATE);
+        boolean isShown = preferences.getBoolean("isShown", false);
+        if(!isShown){
+            startActivity(new Intent(this, OnBoardActivity.class));
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
