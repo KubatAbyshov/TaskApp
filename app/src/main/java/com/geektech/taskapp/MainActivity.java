@@ -1,5 +1,7 @@
 package com.geektech.taskapp;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +9,8 @@ import android.os.Bundle;
 import com.geektech.taskapp.onboard.OnBoardActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 
 import androidx.fragment.app.Fragment;
@@ -23,6 +27,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.ImageView;
+
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
+import static android.content.Intent.ACTION_CREATE_DOCUMENT;
+import static org.apache.commons.io.FileUtils.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences("settings", MODE_PRIVATE);
         boolean isShown = preferences.getBoolean("isShown", false);
-        if(!isShown){
+        if (!isShown) {
             startActivity(new Intent(this, OnBoardActivity.class));
             finish();
             return;
@@ -63,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+//        initFile();
     }
 
     @Override
@@ -83,9 +104,65 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-            fragment.getChildFragmentManager().getFragments().get(0).onActivityResult(requestCode, resultCode, data);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        fragment.getChildFragmentManager().getFragments().get(0).onActivityResult(requestCode, resultCode, data);
 
     }
+
+//    @AfterPermissionGranted(101)
+//    private void initFile() {
+//
+//        String[] permissions;
+//        if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+//
+//        File folder = new File(Environment.getExternalStorageDirectory(),"TaskApp");
+//        folder.mkdirs();
+//
+//
+//        File file = new File(folder, "note.txt");
+//            try {
+//                file.createNewFile();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            File imageFile = new File(folder, "image.png");
+//            downloadFile(imageFile);
+//
+//
+//        }else {
+//        EasyPermissions.requestPermissions(this, "Разрешить?", 101,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//    }
+//
+//
+//}
+//
+//private void downloadFile(final File imageFile){
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                    try {
+//                    URL url = new URL("https://square.github.io/picasso/static/sample.png");
+//                    FileUtils.copyURLToFile(url, imageFile);
+//                } catch (MalformedURLException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//        });
+//        thread.start();
+//}
+//
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//
+//        // Forward results to EasyPermissions
+//        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+//    }
 }
 

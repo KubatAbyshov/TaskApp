@@ -7,10 +7,12 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.geektech.taskapp.FormActivity;
 import com.geektech.taskapp.MainActivity;
 import com.geektech.taskapp.R;
 import com.google.android.material.tabs.TabLayout;
@@ -34,7 +36,10 @@ public class OnBoardActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences preferences = getSharedPreferences("settings", MODE_PRIVATE);
+                preferences.edit().putBoolean("isShown", true).apply();
                 startActivity(new Intent(OnBoardActivity.this, MainActivity.class));
+                finish();
             }
         });
 
