@@ -119,6 +119,12 @@ public class HomeFragment extends Fragment {
         });
         return root;
     }
+
+    public void sortList(){
+        list.clear();
+        list.addAll(App.getDatabase().taskDao().sort());
+        adapter.notifyDataSetChanged();
+    }
 }
 
 

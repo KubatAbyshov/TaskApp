@@ -36,20 +36,20 @@ public class FormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_form);
         editTitle = findViewById(R.id.editTitle);
         desc = findViewById(R.id.description);
-
         edit();
+
 
     }
 
     public void edit() {
-        task = (Task)
-                getIntent().getSerializableExtra("Task");
+        task = (Task) getIntent().getSerializableExtra("Task");
         if (task != null) {
             editTitle.setText(task.getTitle());
             desc.setText(task.getDesc());
 
         }
         App.getDatabase().taskDao().delete(task);
+
     }
 
 

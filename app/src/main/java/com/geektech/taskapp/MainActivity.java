@@ -7,10 +7,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.geektech.taskapp.onboard.OnBoardActivity;
+import com.geektech.taskapp.ui.home.HomeFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.fragment.app.Fragment;
@@ -106,6 +108,15 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sort:
+                Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                ((HomeFragment) navHostFragment.getChildFragmentManager().getFragments().get(0)).sortList();
+        }
+        return true;
+    }
 
 
    /* @Override
@@ -173,4 +184,5 @@ public class MainActivity extends AppCompatActivity {
 //        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
 //    }
 }
+
 
