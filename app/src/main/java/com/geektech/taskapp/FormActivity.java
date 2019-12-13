@@ -42,13 +42,15 @@ public class FormActivity extends AppCompatActivity {
     }
 
     public void edit() {
+
         task = (Task) getIntent().getSerializableExtra("Task");
         if (task != null) {
             editTitle.setText(task.getTitle());
             desc.setText(task.getDesc());
 
         }
-        App.getDatabase().taskDao().delete(task);
+
+
 
     }
 
@@ -61,14 +63,20 @@ public class FormActivity extends AppCompatActivity {
         if (task != null) {
             task.setTitle(title);
             task.setDesc(description);
+            App.getDatabase().taskDao().update(task);
 
+        } else {
+            task = new Task(title, description);
             App.getDatabase().taskDao().insert(task);
+
 
        /* intent.putExtra("key", task);
         setResult(RESULT_OK, intent);*/
-            finish();
+
 
         }
+
+        finish();
 
     }
 
