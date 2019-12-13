@@ -51,6 +51,7 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
+
                 if (EasyPermissions.hasPermissions(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     File downloadImages = new File(Environment.getExternalStorageDirectory(), "TaskApp/Images");
                     downloadImages.mkdirs();
@@ -70,16 +71,24 @@ public class GalleryFragment extends Fragment {
 
                     downloadFile(images);
 
+
+
+
+
                 } else {
                     EasyPermissions.requestPermissions(getActivity(), "Разрешить?", 101,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
+
+
                 }
+
                 }
             });
         }
 
         private void downloadFile(final ArrayList<File> image){
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -128,16 +137,20 @@ public class GalleryFragment extends Fragment {
                     }catch (IOException e){
                         e.printStackTrace();
                     }
-
-                    progressBar.setVisibility(View.INVISIBLE);
-
-
                 }
+
+                progressBar.setVisibility(View.INVISIBLE);
 
 
 
             }
+
         });
+
+
         thread.start();
+
         }
+
+
     }
