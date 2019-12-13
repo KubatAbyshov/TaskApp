@@ -25,7 +25,7 @@ public class FormActivity extends AppCompatActivity {
     private EditText editTitle;
     private EditText desc;
 
-    Task task = new Task();
+    Task task;
 
 //    Intent intent = new Intent();
 
@@ -37,8 +37,6 @@ public class FormActivity extends AppCompatActivity {
         editTitle = findViewById(R.id.editTitle);
         desc = findViewById(R.id.description);
         edit();
-
-
     }
 
     public void edit() {
@@ -47,11 +45,7 @@ public class FormActivity extends AppCompatActivity {
         if (task != null) {
             editTitle.setText(task.getTitle());
             desc.setText(task.getDesc());
-
         }
-
-
-
     }
 
 

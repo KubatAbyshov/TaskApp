@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -29,22 +30,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
-import android.widget.Button;
-import android.widget.ImageView;
-
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
-
-import static android.content.Intent.ACTION_CREATE_DOCUMENT;
-import static org.apache.commons.io.FileUtils.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -94,11 +79,18 @@ public class MainActivity extends AppCompatActivity {
 //        initFile();
     }
 
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//
+//        return true;
+//    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -109,14 +101,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sort:
                 Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
                 ((HomeFragment) navHostFragment.getChildFragmentManager().getFragments().get(0)).sortList();
+                return true;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
+
+    //    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        return true;
+//    }
 
 
    /* @Override

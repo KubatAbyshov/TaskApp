@@ -50,24 +50,20 @@ public class GalleryFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 progressBar.setVisibility(View.VISIBLE);
+                button.setVisibility(View.INVISIBLE);
 
                 if (EasyPermissions.hasPermissions(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     File downloadImages = new File(Environment.getExternalStorageDirectory(), "TaskApp/Images");
                     downloadImages.mkdirs();
 
-                    File image1 = new File(downloadImages, "image1.png");
-                    File image2 = new File(downloadImages, "image2.png");
-                    File image3 = new File(downloadImages, "image3.png");
-                    File image4 = new File(downloadImages, "image4.png");
-                    File image5 = new File(downloadImages, "image5.png");
-
                     ArrayList<File> images = new ArrayList<>();
-                    images.add(image1);
-                    images.add(image2);
-                    images.add(image3);
-                    images.add(image4);
-                    images.add(image5);
+                    images.add(new File(downloadImages, "image1.png"));
+                    images.add(new File(downloadImages, "image2.png"));
+                    images.add(new File(downloadImages, "image3.png"));
+                    images.add(new File(downloadImages, "image4.png"));
+                    images.add(new File(downloadImages, "image5.png"));
 
                     downloadFile(images);
 
@@ -140,6 +136,16 @@ public class GalleryFragment extends Fragment {
                 }
 
                 progressBar.setVisibility(View.INVISIBLE);
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        button.setVisibility(View.VISIBLE);
+
+                    }
+                });
+
 
 
 
