@@ -1,17 +1,18 @@
 package com.geektech.taskapp;
 
 import android.Manifest;
+import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.geektech.taskapp.onboard.OnBoardActivity;
 import com.geektech.taskapp.ui.home.HomeFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -29,25 +30,66 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+
 import android.view.Menu;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
+    LottieAnimationView lav;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+//        lav.setAnimation("worm.json");
+//        lav.addAnimatorListener(new Animator.AnimatorListener() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//
+//                if (animation != null) {
+//                    lav.playAnimation();
+//                    lav.setVisibility(View.VISIBLE);
+//                }
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                lav.setVisibility(View.GONE);
+//            }
+//
+//            @Override
+//            public void onAnimationCancel(Animator animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animator animation) {
+//
+//            }
+//        });
+
+
         SharedPreferences preferences = getSharedPreferences("settings", MODE_PRIVATE);
         boolean isShown = preferences.getBoolean("isShown", false);
         if (!isShown) {
+
             startActivity(new Intent(this, OnBoardActivity.class));
+
             finish();
+
             return;
+
         }
 
         setContentView(R.layout.activity_main);
+
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -56,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, FormActivity.class);
                 startActivityForResult(intent, 1);
+
             }
         });
 
@@ -64,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-
 
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -76,10 +118,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-//        initFile();
+
+
+        //        initFile();
     }
 
-//    @Override
+
+
+    //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        // Inflate the menu; this adds items to the action bar if it is present.
 //

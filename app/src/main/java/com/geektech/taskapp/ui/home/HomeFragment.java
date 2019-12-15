@@ -1,5 +1,6 @@
 package com.geektech.taskapp.ui.home;
 
+import android.animation.Animator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,14 +19,10 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Dao;
-import androidx.room.DatabaseConfiguration;
-import androidx.room.InvalidationTracker;
-import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.geektech.taskapp.App;
 import com.geektech.taskapp.FormActivity;
-import com.geektech.taskapp.MainActivity;
 import com.geektech.taskapp.OnItemClickListener;
 import com.geektech.taskapp.R;
 import com.geektech.taskapp.Task;
@@ -36,8 +32,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.view.View.getDefaultSize;
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class HomeFragment extends Fragment {
 
@@ -45,7 +39,7 @@ public class HomeFragment extends Fragment {
     private List<Task> list;
     AlertDialog.Builder ad;
 
-
+    LottieAnimationView lav;
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -54,6 +48,38 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
+        lav.setAnimation("worm.json");
+        lav.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+                lav.playAnimation();
+                if (animation == null) {
+                    lav.setAnimation(R.raw.worm);
+                    Log.e("Animation:", "start");
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                Log.e("Animation:", "end");
+                if (animation != null) {
+                    lav.setVisibility(View.INVISIBLE);
+                }
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                Log.e("onAnimationCancel: ", "cancel");
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                Log.e("onAnimationRepeat: ", "repeat");
+
+            }
+        });
 
 
         list = new ArrayList<>();
@@ -71,8 +97,6 @@ public class HomeFragment extends Fragment {
 
         adapter = new TaskAdapter(list);
         recyclerView.setAdapter(adapter);
-
-
 
 
         adapter.setOnItemClickListener(new OnItemClickListener() {
@@ -117,14 +141,19 @@ public class HomeFragment extends Fragment {
             }
 
         });
+
+
         return root;
     }
 
-    public void sortList(){
+
+    public void sortList() {
         list.clear();
         list.addAll(App.getDatabase().taskDao().sort());
         adapter.notifyDataSetChanged();
     }
+
+
 }
 
 
