@@ -48,38 +48,38 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
-        lav.setAnimation("worm.json");
-        lav.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
 
-                lav.playAnimation();
-                if (animation == null) {
-                    lav.setAnimation(R.raw.worm);
-                    Log.e("Animation:", "start");
-                }
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                Log.e("Animation:", "end");
-                if (animation != null) {
-                    lav.setVisibility(View.INVISIBLE);
-                }
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                Log.e("onAnimationCancel: ", "cancel");
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-                Log.e("onAnimationRepeat: ", "repeat");
-
-            }
-        });
+//        lav.addAnimatorListener(new Animator.AnimatorListener() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//
+//                lav.playAnimation();
+//
+//                    lav.setAnimation(R.raw.worm);
+//                    Log.e("Animation:", "start");
+//
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                Log.e("Animation:", "end");
+//                if (animation != null) {
+//                    lav.setVisibility(View.INVISIBLE);
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onAnimationCancel(Animator animation) {
+//                Log.e("onAnimationCancel: ", "cancel");
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animator animation) {
+//                Log.e("onAnimationRepeat: ", "repeat");
+//
+//            }
+//        });
 
 
         list = new ArrayList<>();
@@ -141,6 +141,7 @@ public class HomeFragment extends Fragment {
             }
 
         });
+
 
 
         return root;

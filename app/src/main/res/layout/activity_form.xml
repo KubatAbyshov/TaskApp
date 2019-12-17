@@ -13,22 +13,27 @@
         android:id="@+id/editTitle"
         style="@style/EditTextStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
+        android:drawablePadding="10dp"
+        android:drawableLeft="@drawable/sf_person"
         android:hint="Введите задачу"
-        android:textStyle="bold" />
+        android:layout_marginBottom="20dp"/>
 
     <EditText
         android:id="@+id/description"
         style="@style/EditTextStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="top|start"
+        android:layout_height="80dp"
+        android:drawablePadding="10dp"
+        android:drawableLeft="@drawable/sf_lock"
+        android:gravity="start|center"
         android:hint="Введите описание"
-        android:textStyle="italic" />
+        android:textStyle="italic"
+        android:layout_marginBottom="20dp" />
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:background="@drawable/bg_button"
         android:onClick="onClick"
         android:text="Save"

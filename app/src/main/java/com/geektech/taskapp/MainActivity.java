@@ -2,6 +2,7 @@ package com.geektech.taskapp;
 
 import android.Manifest;
 import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,13 +41,15 @@ public class MainActivity extends AppCompatActivity {
 
     LottieAnimationView lav;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        lav.setAnimation(R.raw.lighthouse);
+        lav.loop(true);
+        lav.playAnimation();
+        lav.setVisibility(View.VISIBLE);
 
-//        lav.setAnimation("worm.json");
 //        lav.addAnimatorListener(new Animator.AnimatorListener() {
 //            @Override
 //            public void onAnimationStart(Animator animation) {
@@ -81,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, OnBoardActivity.class));
 
             finish();
-
             return;
 
         }
@@ -122,6 +124,11 @@ public class MainActivity extends AppCompatActivity {
 
         //        initFile();
     }
+
+
+//    private void startCheckAnimation(){
+//        ValueAnimator animator = ValueAnimator.ofFloat()
+//    }
 
 
 

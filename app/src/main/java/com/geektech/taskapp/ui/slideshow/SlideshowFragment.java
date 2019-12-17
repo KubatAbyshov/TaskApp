@@ -14,6 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.geektech.taskapp.R;
 
@@ -31,6 +35,8 @@ public class SlideshowFragment extends Fragment implements View.OnClickListener 
     private SlideshowViewModel slideshowViewModel;
     private List<String> urls;
     private ProgressBar progressBar;
+    private RecyclerView recyclerView;
+    private SFRAdapter adapter;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -39,6 +45,13 @@ public class SlideshowFragment extends Fragment implements View.OnClickListener 
                 ViewModelProviders.of(this).get(SlideshowViewModel.class);
         View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
         root.findViewById(R.id.btnDownload).setOnClickListener(this);
+
+        recyclerView =root.findViewById(R.id.fs_recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        adapter = new SFRAdapter();
+        recyclerView.setAdapter(adapter);
+
         progressBar = root.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         urls = new ArrayList<>();
