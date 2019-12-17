@@ -10,11 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.geektech.taskapp.R;
 import com.geektech.taskapp.ui.home.TaskAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SFRAdapter extends RecyclerView.Adapter<ViewHolder>{
 
-    private List<ImageView> list;
+    private List<ImageView> list = new ArrayList<>();
 
     @NonNull
     @Override

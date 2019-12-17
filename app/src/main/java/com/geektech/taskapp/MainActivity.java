@@ -45,10 +45,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        lav.setAnimation(R.raw.lighthouse);
-        lav.loop(true);
-        lav.playAnimation();
-        lav.setVisibility(View.VISIBLE);
+//        lav.setAnimation(R.raw.lighthouse);
+//        lav.loop(true);
+//        lav.playAnimation();
+//        lav.setVisibility(View.VISIBLE);
 
 //        lav.addAnimatorListener(new Animator.AnimatorListener() {
 //            @Override
