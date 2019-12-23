@@ -1,5 +1,6 @@
 package com.geektech.taskapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,15 +16,24 @@ import android.widget.TextView;
 import com.geektech.taskapp.room.TaskDao;
 import com.geektech.taskapp.ui.home.HomeFragment;
 import com.geektech.taskapp.ui.home.TaskAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FormActivity extends AppCompatActivity {
 
     private EditText editTitle;
     private EditText desc;
+    private String userId;
 
     Task task;
 
@@ -36,6 +46,8 @@ public class FormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_form);
         editTitle = findViewById(R.id.editTitle);
         desc = findViewById(R.id.description);
+        userId = FirebaseAuth.getInstance().getUid();
+        getInfo();
         edit();
     }
 
@@ -48,11 +60,49 @@ public class FormActivity extends AppCompatActivity {
         }
     }
 
+    private void getInfo() {
+        FirebaseFirestore.getInstance()
+                .collection("tasks")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            String name = task.getResult().getString("name");
+                            String email = task.getResult().getString("email");
+                            editTitle.setText(name);
+                            desc.setText(email);
+                        }
+                    }
+                });
+    }
+
 
     public void onClick(View view) {
 
         String title = editTitle.getText().toString().trim();
         String description = desc.getText().toString().trim();
+
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("title", title);
+        map.put("description", description);
+        FirebaseFirestore.getInstance()
+                .collection("tasks")
+                .document()
+                .set(map)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toaster.show("Успешно");
+                        } else {
+                            Toaster.show("Ошибка");
+                        }
+                    }
+
+                });
 
         if (task != null) {
             task.setTitle(title);
@@ -70,7 +120,9 @@ public class FormActivity extends AppCompatActivity {
 
         }
 
+
         finish();
+
 
     }
 

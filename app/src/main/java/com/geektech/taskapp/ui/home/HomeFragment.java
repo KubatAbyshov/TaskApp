@@ -98,7 +98,6 @@ public class HomeFragment extends Fragment {
         adapter = new TaskAdapter(list);
         recyclerView.setAdapter(adapter);
 
-
         adapter.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
