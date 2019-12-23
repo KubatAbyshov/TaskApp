@@ -8,12 +8,15 @@ import android.os.Bundle;
 
 import com.geektech.taskapp.onboard.OnBoardActivity;
 import com.geektech.taskapp.ui.home.HomeFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -22,6 +25,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,22 +37,23 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.widget.TextView;
 
-import java.util.prefs.Preferences;
-
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
-    TextView name;
-    TextView email;
+    TextView editName;
+    TextView editEmail;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
-        SharedPreferences preferences = getSharedPreferences("settings", MODE_PRIVATE);
+        final SharedPreferences preferences = getSharedPreferences("settings", MODE_PRIVATE);
+
+
         boolean isShown = preferences.getBoolean("isShown", false);
 
         if (!isShown) {
@@ -62,7 +70,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_main);
-
+        userId = FirebaseAuth.getInstance().getUid();
+        getInfo2();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -79,35 +88,34 @@ public class MainActivity extends AppCompatActivity {
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-
-        SharedPreferences sharedPreferences = getSharedPreferences("nav_settings", MODE_PRIVATE);
-        name = findViewById(R.id.textName);
-        email = findViewById(R.id.textEmail);
-
-        sharedPreferences.getString("name", "");
-        sharedPreferences.getString("email", "");
-
         View header = navigationView.getHeaderView(0);
 
 
+        editName = header.findViewById(R.id.textName);
+        editEmail = header.findViewById(R.id.textEmail);
+
+//        editName.setText(preferences.getString("name",editName.toString()));
+//        editEmail.setText(preferences.getString("email",editEmail.toString()));
 
 
         header.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-            }
-        });
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+            }
+
+        });
 
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
+
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
                 R.id.nav_tools, R.id.nav_share, R.id.nav_send)
                 .setDrawerLayout(drawer)
                 .build();
+
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -116,13 +124,30 @@ public class MainActivity extends AppCompatActivity {
         //        initFile();
     }
 
+    private void getInfo2() {
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userId)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (documentSnapshot != null) {
+                            String name = documentSnapshot.getString("name");
+                            String email = documentSnapshot.getString("email");
+                            editName.setText(name);
+                            editEmail.setText(email);
+                        }
+                    }
+                });
+    }
+
 
 //    private void startCheckAnimation(){
 //        ValueAnimator animator = ValueAnimator.ofFloat()
 //    }
 
 
-    //    @Override
+        //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        // Inflate the menu; this adds items to the action bar if it is present.
 //
@@ -130,51 +155,51 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sort:
-                Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-                assert navHostFragment != null;
-                ((HomeFragment) navHostFragment.getChildFragmentManager().getFragments().get(0)).sortList();
-                return true;
-            case R.id.signOut:
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Выход из аккаунта");
-                builder.setMessage("Вы хотите выйти из аккаунта?");
-
-
-                builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        FirebaseAuth.getInstance().signOut();
-                        finish();
-                    }
-                });
-                builder.setNegativeButton("Нет", null);
-
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                break;
+        @Override
+        public boolean onCreateOptionsMenu (Menu menu){
+            getMenuInflater().inflate(R.menu.main, menu);
+            return super.onCreateOptionsMenu(menu);
         }
-        return super.onOptionsItemSelected(item);
-    }
 
-    //    @Override
+        @Override
+        public boolean onSupportNavigateUp () {
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+            return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                    || super.onSupportNavigateUp();
+        }
+
+        @Override
+        public boolean onOptionsItemSelected (@NonNull MenuItem item){
+            switch (item.getItemId()) {
+                case R.id.sort:
+                    Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                    assert navHostFragment != null;
+                    ((HomeFragment) navHostFragment.getChildFragmentManager().getFragments().get(0)).sortList();
+                    return true;
+                case R.id.signOut:
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle("Выход из аккаунта");
+                    builder.setMessage("Вы хотите выйти из аккаунта?");
+
+
+                    builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            FirebaseAuth.getInstance().signOut();
+                            finish();
+                        }
+                    });
+                    builder.setNegativeButton("Нет", null);
+
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    break;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
+        //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {
 //
 //        return true;
@@ -245,6 +270,6 @@ public class MainActivity extends AppCompatActivity {
 //        // Forward results to EasyPermissions
 //        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
 //    }
-}
+    }
 
 

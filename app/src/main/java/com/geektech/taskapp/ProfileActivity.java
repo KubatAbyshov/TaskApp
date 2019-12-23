@@ -48,6 +48,7 @@ public class ProfileActivity extends AppCompatActivity {
         editEmail = findViewById(R.id.editEmail);
         userId = FirebaseAuth.getInstance().getUid();
         getInfo2();
+
     }
 
     private void getInfo2() {
@@ -113,10 +114,11 @@ public class ProfileActivity extends AppCompatActivity {
 
                 });
 
-        SharedPreferences preferences = getSharedPreferences("nav_settings", MODE_PRIVATE);
+
+        SharedPreferences preferences = getSharedPreferences("settings", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("name", String.valueOf(editName));
-        editor.putString("email", String.valueOf(editEmail));
+        editor.putString("name", name);
+        editor.putString("email", email);
         editor.apply();
 
         finish();
