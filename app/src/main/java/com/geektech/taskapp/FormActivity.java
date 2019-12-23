@@ -47,8 +47,8 @@ public class FormActivity extends AppCompatActivity {
         editTitle = findViewById(R.id.editTitle);
         desc = findViewById(R.id.description);
         userId = FirebaseAuth.getInstance().getUid();
-        getInfo();
         edit();
+
     }
 
     public void edit() {
@@ -60,19 +60,36 @@ public class FormActivity extends AppCompatActivity {
         }
     }
 
-    private void getInfo() {
+//    private void getInfo() {
+//        FirebaseFirestore.getInstance()
+//                .collection("tasks")
+//                .document(userId)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<DocumentSnapshot> task) {
+//                        if (task.isSuccessful() && task.getResult() != null) {
+//                            String name = task.getResult().getString("title");
+//                            String email = task.getResult().getString("description");
+//                            editTitle.setText(name);
+//                            desc.setText(email);
+//                        }
+//                    }
+//                });
+//    }
+
+    private void getInfo2() {
         FirebaseFirestore.getInstance()
                 .collection("tasks")
                 .document(userId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful() && task.getResult() != null) {
-                            String name = task.getResult().getString("name");
-                            String email = task.getResult().getString("email");
-                            editTitle.setText(name);
-                            desc.setText(email);
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (documentSnapshot != null) {
+                            String title = documentSnapshot.getString("title");
+                            String description = documentSnapshot.getString("description");
+                            editTitle.setText(title);
+                            desc.setText(description);
                         }
                     }
                 });
@@ -83,7 +100,7 @@ public class FormActivity extends AppCompatActivity {
 
         String title = editTitle.getText().toString().trim();
         String description = desc.getText().toString().trim();
-
+        getInfo2();
 
         Map<String, Object> map = new HashMap<>();
         map.put("title", title);
@@ -114,6 +131,7 @@ public class FormActivity extends AppCompatActivity {
             App.getDatabase().taskDao().insert(task);
 
 
+
        /* intent.putExtra("key", task);
         setResult(RESULT_OK, intent);*/
 
@@ -121,7 +139,12 @@ public class FormActivity extends AppCompatActivity {
         }
 
 
+
+
+
+
         finish();
+
 
 
     }
